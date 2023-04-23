@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { getReadingList, removeFromReadingList } from '@tmo/books/data-access';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { addToReadingList, getReadingList,markAsFinished, removeFromReadingList } from '@tmo/books/data-access';
 
 @Component({
   selector: 'tmo-reading-list',
@@ -9,10 +10,42 @@ import { getReadingList, removeFromReadingList } from '@tmo/books/data-access';
 })
 export class ReadingListComponent {
   readingList$ = this.store.select(getReadingList);
+  snackBarRef: any;
 
-  constructor(private readonly store: Store) {}
+  constructor(private readonly store: Store, private _snackBar: MatSnackBar) {}
 
   removeFromReadingList(item) {
     this.store.dispatch(removeFromReadingList({ item }));
+    this.snackBarRef = this._snackBar.open(
+      `Removed book ${item.title}`,
+      'UNDO',
+    );
+
+    this.snackBarRef.onAction().subscribe(async () => {
+      this.store.dispatch(
+        addToReadingList({
+          book: {
+            id: item.bookId,
+            ...item,
+          },
+        })
+      );
+    });
   }
+
+  markAsFinished(item) {
+    const changes = {
+      finished: true,
+      finishedDate: new Date().toISOString(),
+    };
+    const finishedItem = { ...item, ...changes };
+    this._snackBar.open(
+      `Finished book ${
+        finishedItem.title
+      } on ${finishedItem?.finishedDate.substring(0, 10)}`,
+      'DONE'
+    );
+    this.store.dispatch(markAsFinished({ item: finishedItem }));
+  }
+  
 }
