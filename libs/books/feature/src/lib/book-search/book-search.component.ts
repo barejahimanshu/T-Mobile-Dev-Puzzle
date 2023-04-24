@@ -5,10 +5,14 @@ import {
   clearSearch,
   getAllBooks,
   ReadingListBook,
+  removeFromReadingList,
   searchBooks
 } from '@tmo/books/data-access';
 import { FormBuilder } from '@angular/forms';
 import { Book } from '@tmo/shared/models';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'tmo-book-search',
@@ -17,14 +21,17 @@ import { Book } from '@tmo/shared/models';
 })
 export class BookSearchComponent implements OnInit {
   books: ReadingListBook[];
+  subscriptionList:Subscription[]=[];
 
   searchForm = this.fb.group({
     term: ''
   });
+  snackBarRef: any;
 
   constructor(
     private readonly store: Store,
-    private readonly fb: FormBuilder
+    private readonly fb: FormBuilder,
+    private _snackBar: MatSnackBar,
   ) {}
 
   get searchTerm(): string {
@@ -33,9 +40,14 @@ export class BookSearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.select(getAllBooks).subscribe(books => {
-      this.books = books;
+    this.books = books;
     });
-  }
+   this.subscriptionList.push(
+     this.searchForm.valueChanges.pipe(debounceTime(500), distinctUntilChanged()).subscribe(term => {
+     this.searchBooks();
+   }),
+   )
+   }
 
   formatDate(date: void | string) {
     return date
@@ -45,6 +57,17 @@ export class BookSearchComponent implements OnInit {
 
   addBookToReadingList(book: Book) {
     this.store.dispatch(addToReadingList({ book }));
+    this.openSnackBar(`Added book ${book.title}`,'UNDO')
+    this.snackBarRef.onAction().subscribe(async ()=>{
+    this.store.dispatch(removeFromReadingList({
+   item: {
+    bookId: book.id,
+    finished: false,
+    finishedDate : null,
+    ...book
+  }
+  }))
+  })
   }
 
   searchExample() {
@@ -59,4 +82,9 @@ export class BookSearchComponent implements OnInit {
       this.store.dispatch(clearSearch());
     }
   }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBarRef=this._snackBar.open(message, action,{duration:3000});
+    }
+
 }
