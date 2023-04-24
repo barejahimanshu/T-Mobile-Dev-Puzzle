@@ -9,8 +9,6 @@ import {
 } from '@tmo/books/data-access';
 import { FormBuilder } from '@angular/forms';
 import { Book } from '@tmo/shared/models';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'tmo-book-search',
@@ -19,7 +17,6 @@ import { Subscription } from 'rxjs';
 })
 export class BookSearchComponent implements OnInit {
   books: ReadingListBook[];
-  subscriptionList:Subscription[]=[];
 
   searchForm = this.fb.group({
     term: ''
@@ -36,14 +33,9 @@ export class BookSearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.store.select(getAllBooks).subscribe(books => {
-    this.books = books;
+      this.books = books;
     });
-   this.subscriptionList.push(
-     this.searchForm.valueChanges.pipe(debounceTime(500), distinctUntilChanged()).subscribe(term => {
-     this.searchBooks();
-   }),
-   )
-   }
+  }
 
   formatDate(date: void | string) {
     return date
