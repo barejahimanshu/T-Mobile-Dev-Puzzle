@@ -62,8 +62,6 @@ export class BookSearchComponent implements OnInit {
     this.store.dispatch(removeFromReadingList({
    item: {
     bookId: book.id,
-    finished: false,
-    finishedDate : null,
     ...book
   }
   }))
