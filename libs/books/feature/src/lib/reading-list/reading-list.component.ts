@@ -34,18 +34,13 @@ export class ReadingListComponent {
   }
 
   markAsFinished(item) {
-    const changes = {
-      finished: true,
-      finishedDate: new Date().toISOString(),
-    };
-    const finishedItem = { ...item, ...changes };
     this._snackBar.open(
       `Finished book ${
-        finishedItem.title
-      } on ${finishedItem?.finishedDate.substring(0, 10)}`,
+        item.title
+      }`,
       'DONE'
     );
-    this.store.dispatch(markAsFinished({ item: finishedItem }));
-  }
+    this.store.dispatch(markAsFinished({ item }));
+  };
   
 }

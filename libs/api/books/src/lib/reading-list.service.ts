@@ -32,8 +32,8 @@ export class ReadingListService {
   async updateFinishedStatus(id: string, item: ReadingListItem): Promise<void> {
     this.storage.update((list) => {
       const itemToBeUpdated = list.find((book) => book.bookId === id);
-      itemToBeUpdated.finished = item.finished;
-      itemToBeUpdated.finishedDate = item.finishedDate;
+      itemToBeUpdated.finished = true;
+      itemToBeUpdated.finishedDate = new Date().toISOString();
       return list;
     });
   }
