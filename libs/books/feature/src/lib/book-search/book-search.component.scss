@@ -24,7 +24,7 @@ form {
 
 .book--title {
   font-weight: 500;
-  color: $gray85;
+  color: $gray80;
   margin-bottom: $spacing-xs;
 }
 
@@ -68,12 +68,5 @@ form {
   justify-content: center;
   min-height: 50vh;
   font-size: 1.5rem;
-  color: $gray80;
-}
-
-.btn-link{
-  border: 0;
-  background: none;
-  color: $pink-accent;
-  cursor: pointer;
+  color: $gray40;
 }
