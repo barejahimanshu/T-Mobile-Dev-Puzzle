@@ -47,7 +47,7 @@ main {
   h2 {
     position: relative;
     color: $white;
-    background-color: $gray85;
+    background-color: $gray80;
     margin: 0;
     padding: 0.75rem;
     text-align: center;
@@ -64,8 +64,4 @@ main {
 
 .reading-list-content {
   padding: $spacing-xxs;
-}
-
-.button-reading-list-toggle {
-  background-color: $gray85;
 }
