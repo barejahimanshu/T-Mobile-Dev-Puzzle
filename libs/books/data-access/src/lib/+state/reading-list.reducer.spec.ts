@@ -52,22 +52,22 @@ describe('Books Reducer', () => {
       expect(result.ids).toEqual(['A', 'B', 'C']);
     });
 
-    it('addToReading List should add book to the reading list', () => {
+    it('should call addToReadingList function and book should be added to the reading list', () => {
       const action = ReadingListActions.addToReadingList({
-        book: createBook('D'),
+        book: createBook('JavaScript'),
       });
 
       const result: State = reducer(state, action);
 
-      expect(result.ids).toEqual(['A', 'B', 'D']);
+      expect(result.ids).toEqual(['A', 'B', 'JavaScript']);
     });
 
-    it('should remove from reading list', () => {
+    it('should call removeFromReadingList function and remove the book from reading list', () => {
       const action = ReadingListActions.removeFromReadingList({
-        item: createReadingListItem('D'),
+        item: createReadingListItem('A'),
       });
       const result: State = reducer(state, action);
-      expect(result.ids).toEqual(['A', 'B']);
+      expect(result.ids).toEqual(['B']);
     });
   });
 
