@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { addToReadingList, getReadingList,markAsFinished, removeFromReadingList } from '@tmo/books/data-access';
+import { addToReadingList, getAllBooks, getBooks, getReadingList,markAsFinished, removeFromReadingList } from '@tmo/books/data-access';
 
 @Component({
   selector: 'tmo-reading-list',
@@ -18,7 +18,7 @@ export class ReadingListComponent {
     this.store.dispatch(removeFromReadingList({ item }));
     this.snackBarRef = this._snackBar.open(
       `Removed book ${item.title}`,
-      'UNDO',
+      'UNDO',{duration: 5000}
     );
 
     this.snackBarRef.onAction().subscribe(async () => {
@@ -34,10 +34,11 @@ export class ReadingListComponent {
   }
 
   markAsFinished(item) {
+ 
     this._snackBar.open(
-      `Finished book ${
+      `Book with title as ${
         item.title
-      }`,
+      } has been finished `,
       'DONE'
     );
     this.store.dispatch(markAsFinished({ item }));
