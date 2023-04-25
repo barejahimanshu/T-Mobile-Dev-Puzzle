@@ -5,7 +5,6 @@ import {
   inject,
 } from '@angular/core/testing';
 import { SharedTestingModule } from '@tmo/shared/testing';
-
 import { ReadingListComponent } from './reading-list.component';
 import { BooksFeatureModule } from '@tmo/books/feature';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -44,12 +43,12 @@ describe('ReadingListComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should remove from reading list', () => {
+  it('should remove book from the reading list when remove button icon clicked, 1', () => {
     const book = {
-      bookId: 'test',
-      title: 'test',
-      authors: ['test'],
-      description: 'test description',
+      bookId: 'Java',
+      title: 'Java and SpringBoot',
+      authors: ['Kevin O'],
+      description: 'Java and SpringBootconcepts'
     };
     spyOn(snackBar, 'open').and.returnValue(
       (component.snackBarRef = {
@@ -60,5 +59,14 @@ describe('ReadingListComponent', () => {
     );
     component.removeFromReadingList(book);
     expect(snackBar.open).toHaveBeenCalled();
+  });
+
+  it('should call the openSnackbar function', () => {
+    const spy = spyOn(snackBar, 'open');
+    const message="Book with title Python has been removed from the reading list";
+    const snackAction = "UNDO";
+    const timer = {"duration": 3000};
+    component.openSnackBar(message, snackAction);
+    expect(spy).toHaveBeenCalledWith(message,snackAction,timer);
   });
 });

@@ -16,8 +16,8 @@ export class ReadingListComponent {
 
   removeFromReadingList(item) {
     this.store.dispatch(removeFromReadingList({ item }));
-    this.snackBarRef = this._snackBar.open(
-      `Removed book ${item.title}`,
+    this.openSnackBar(
+      `Book with title as  ${item.title} is removed to the reading list`,
       'UNDO',
     );
 
@@ -32,4 +32,8 @@ export class ReadingListComponent {
       );
     });
   }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBarRef=this._snackBar.open(message, action,{duration:3000});
+    }
 }
