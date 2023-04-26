@@ -70,3 +70,10 @@ form {
   font-size: 1.5rem;
   color: $gray40;
 }
+
+.btn-link{
+  border: 0;
+  background: none;
+  color: $pink-accent;
+  cursor: pointer;
+}
